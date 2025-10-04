@@ -16,14 +16,10 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [ "x86_64-linux" "aarch64-linux" ];
       perSystem = {...}: {
-        config.themes = builtins.listToAttrs (
-          map (file: {
-            name = builtins.replaceStrings [".yaml"] [""] file;
-            value = builtins.fromJSON (builtins.readFile ./themes/${file});
-          })
-          (builtins.filter (f: builtins.match ".*\\.yaml$" f != null)
-            (builtins.attrNames (builtins.readDir ./themes)))
-        );
+        flake.lib.themes = {
+          occult-umbral = builtins.fromJSON(builtins ./themes/occult-umbral.json);
+          occult = builtins.fromJSON(builtins.readFile ./themes/occult.json);
+        };
       };
     };
 }
